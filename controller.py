@@ -5,7 +5,8 @@ Created on Jul 25, 2012
 '''
 from cocos.layer import Layer
 import pyglet
-from status import status
+#from status import status
+
 class Controller( Layer ):
     is_event_handler = True
     def __init__(self, model):
@@ -16,16 +17,20 @@ class Controller( Layer ):
         self.elapsed = 0
         
     def on_key_press(self, k, m):
+        # add some keyboard bindings here
+        if k == pyglet.window.key.SPACE:
+            print "You pressed Space"
+            self.model.set_choice()
+        if k == pyglet.window.key.ESCAPE:
+            print "pressed esc trying to switch back"
+            self.parent.switch_to(0)
         if self.paused:
             return False
         if self.used_key:
             return False
         self.used_key = True
         return True
-        
-        # add some keyboard bindings here
-        if k == pyglet.window.key.SPACE:
-            print "You pressed Space"
+
     def pause_controller(self):
         self.paused = True
         self.unschedule(self.step)

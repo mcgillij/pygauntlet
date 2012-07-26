@@ -6,7 +6,12 @@ Created on Jul 25, 2012
 from cocos.menu import *
 from cocos.director import *
 import pyglet
-from rps_game import get_newgame
+from cocos.scene import Scene
+from model import Model
+from controller import Controller
+from view import View
+from gamelayers import HUD, BackgroundLayer
+
 class OptionsMenu( Menu ):
     def __init__(self):
         super( OptionsMenu, self).__init__('TITLE!WEUROUOU') 
@@ -96,6 +101,19 @@ class MainMenu( Menu ):
     def on_quit(self):
         pyglet.app.exit()
         
+
+def get_newgame():
+    scene = Scene()
+    model = Model()
+    controller = Controller(model)
+    model.set_controller(controller)
+    hud = HUD()
+    view = View(model, hud)
+    scene.add(controller, z=1, name='controller')
+    scene.add(BackgroundLayer(), z=0, name='background')
+    scene.add(view, z=2, name='view')
+    return scene
+
 
 
 if __name__ == '__main__':

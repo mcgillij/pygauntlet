@@ -20,7 +20,7 @@ class GameOver(ColorLayer):
             msg = 'You win!'
         else:
             #play fail sound
-            msg = 'Game Over Man! Game Over!'
+            msg = 'Game Over Man!'
 
         label = Label(msg, font_name='Times New Roman', font_size=54, anchor_x='center', anchor_y='center')
         label.position = (width/2.0, height/2.0)

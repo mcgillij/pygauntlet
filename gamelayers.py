@@ -10,6 +10,7 @@ from pyglet.gl import glPushMatrix, glPopMatrix
 from cocos.director import director
 from cocos.actions import Accelerate, MoveBy, Delay, Hide, CallFunc
 from status import status
+
 class BackgroundLayer(Layer):
     def __init__(self):
         super(BackgroundLayer, self).__init__()
