@@ -79,7 +79,7 @@ class Model(pyglet.event.EventDispatcher):
     def set_choice(self):
         l = [Rock(), Paper(), Shotgun()]
         self.choice = choice(l)
-        self.dispatch_event('on_RPS_select')
+        #self.dispatch_event('on_RPS_select')
 
     def on_RPS_select(self):
         
@@ -101,7 +101,7 @@ Model.register_event_type('on_RPS_select')
 class RPS(object):
     def __init__(self):
         super(RPS, self).__init__()
-        self.pos = Point2(100, 100)
+        self.pos = Point2(1, 1)
         self.rot = 0
         self.image = None
         self.value = None

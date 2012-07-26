@@ -59,7 +59,8 @@ class View(Layer):
         glPushMatrix()
         self.transform()
         #for i in grid draw stuff
-        #if self.model.gameobject:
+        if self.model.choice:
+            self.model.choice.draw()
             #self.model.gameobject.draw()
         glPopMatrix()
 

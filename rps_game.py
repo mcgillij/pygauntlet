@@ -15,7 +15,7 @@ import pyglet
 if __name__ == '__main__':
     pyglet.resource.path.append('assets')
     pyglet.resource.reindex()
-    pyglet.font.add_directory('assets')
+    #pyglet.font.add_directory('assets')
     director.init(resizable = True, width=600, height=720)
     scene = Scene()
     scene.add(MultiplexLayer(
