@@ -48,19 +48,27 @@ class View(Layer):
         return True
 
     def on_game_over(self):
-        self.parent.add(GameOver(win=False), z=10)
+        self.parent.add(GameOver(win='win'), z=10)
         return True
 
     def on_win(self):
-        self.parent.add(GameOver(win=True), z=10)
+        self.parent.add(GameOver(win='lose'), z=10)
         return True
+
+    def on_tie(self):
+        self.parent.add(GameOver(win='tie'), z=10)
 
     def draw(self):
         glPushMatrix()
         self.transform()
-        #for i in grid draw stuff
+
+        for c in self.model.player_choices:
+            c.draw()
+
         if self.model.choice:
             self.model.choice.draw()
+        if self.model.cpu_choice:
+            self.model.cpu_choice.draw()
             #self.model.gameobject.draw()
         glPopMatrix()
 

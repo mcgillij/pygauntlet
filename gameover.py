@@ -11,16 +11,19 @@ from cocos.actions import Accelerate, Rotate, Reverse, Repeat, Delay
 
 class GameOver(ColorLayer):
     is_event_handler = True
-    def __init__(self, win = False):
+    def __init__(self, win):
         super(GameOver, self).__init__(32, 32, 32, 64)
         width, height = director.get_window_size()
 
-        if win:
+        if win == 'win':
             #play win sound
             msg = 'You win!'
-        else:
+        elif win == 'lose':
             #play fail sound
             msg = 'Game Over Man!'
+        else: #tie
+            print "tie"
+            msg = 'Tie! Awe Muffin!'
 
         label = Label(msg, font_name='Times New Roman', font_size=54, anchor_x='center', anchor_y='center')
         label.position = (width/2.0, height/2.0)

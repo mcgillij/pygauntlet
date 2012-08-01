@@ -19,8 +19,8 @@ class Controller( Layer ):
     def on_key_press(self, k, m):
         # add some keyboard bindings here
         if k == pyglet.window.key.SPACE:
-            print "You pressed Space"
-            self.model.set_choice()
+            print "pressed space"
+            #self.model.set_choice()
         if k == pyglet.window.key.ESCAPE:
             print "pressed esc trying to switch back"
             self.parent.switch_to(0)
@@ -31,15 +31,28 @@ class Controller( Layer ):
         self.used_key = True
         return True
 
+    def on_mouse_release(self, x, y, button, modifiers):
+        from cocos.director import director
+        vx, vy = director.get_virtual_coordinates(x, y)
+        for c in self.model.player_choices:
+            rect = c.get_rect()
+            print rect
+            if c.contains(vx, vy):
+                self.model.set_choice(c)
+                return
+
     def pause_controller(self):
         self.paused = True
         self.unschedule(self.step)
+
     def resume_controller(self):
         self.paused = False
         self.schedule(self.step)
+
     def step(self, dt):
         self.elapsed += dt
         # add stuff with timesteps here
+
     def draw(self):
         self.used_key = False
 
