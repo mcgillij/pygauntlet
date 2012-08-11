@@ -1,12 +1,5 @@
-pyglet_mvc_rps
-==============
+pygauntlet
 
-pyglet / cocos mvc / rock paper shotgun game.
+pyglet / cocos2d / gauntlet style game
 
-Testing the functionality of the pyglet_mvc base project
-with a simple game of rock paper scissors (shotgun)
-
-
-Dependencies: 
-  pyglet (http://pyglet.org)
-  cocos (http://cocos2d.org)
+Dependencies: pyglet / cocos2d 
