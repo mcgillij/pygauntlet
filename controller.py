@@ -11,6 +11,7 @@ class Controller( Layer ):
         self.paused = True
         self.model = model
         self.elapsed = 0
+        self.mouse_pos = self.model.cursor.position
 
     def on_key_press(self, k, m):
         # add some keyboard bindings here
@@ -56,10 +57,15 @@ class Controller( Layer ):
             self.model.player.sprinting = False
 
     def on_mouse_press(self, x, y, button, modifiers):
+        self.mouse_pos = (x, y)
         self.model.player.shooting = True
         vx, vy = director.get_virtual_coordinates(x, y)
+    
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.mouse_pos = (x, y)
 
     def on_mouse_release(self, x, y, button, modifiers):
+        self.mouse_pos = (x, y)
         """ call the shoot function in the direction of the mouse 
         cursor originating from the players location """
         vx, vy = director.get_virtual_coordinates(x, y)
@@ -74,6 +80,7 @@ class Controller( Layer ):
         self.schedule(self.step)
 
     def step(self, dt):
+        self.model.cursor.update(self.mouse_pos[0], self.mouse_pos[1])
         self.elapsed += dt
         #print self.elapsed
         update_speed = 0.01

@@ -10,7 +10,7 @@ TW = 32
 class Model(pyglet.event.EventDispatcher):
     def __init__(self):
         super(Model, self).__init__()
-        
+        self.cursor = Cursor()
         self.player = Player()
         #self.level = Level()
         status.reset()
@@ -31,8 +31,9 @@ class Model(pyglet.event.EventDispatcher):
 
     def init(self):
         # set base conditions so we can load a new level
-        self.player = Player()
+        #self.player = Player()
         #self.level = Level()
+        pass
 
     def move_player(self):
         multiplier = 1
@@ -70,7 +71,13 @@ class Player(Sprite):
         self.attacking = False
         self.speed = 3
         
-        
+class Cursor(Sprite):
+    def __init__(self):
+        super(Cursor, self).__init__('shotgun.png')
+        self.position = (100, 100)
+    def update(self, x, y):
+        self.position = (x, y)
+
 class Mob(Sprite):
     def __init__(self):
         super(Mob, self).__init__('mob.png')

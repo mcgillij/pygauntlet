@@ -56,5 +56,6 @@ class View(Layer):
         glPushMatrix()
         self.transform()
         self.model.player.draw()
+        self.model.cursor.draw()
         #print self.model.player.move_up
         glPopMatrix()
