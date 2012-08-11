@@ -1,16 +1,9 @@
-'''
-Created on Jul 25, 2012
-
-@author: mcgillij
-'''
-
 from cocos.scene import Scene
 from cocos.layer import MultiplexLayer
 from cocos.director import director
 from gamelayers import BackgroundLayer, ScoresLayer
 from menus import MainMenu, OptionsMenu
 import pyglet
-
 
 if __name__ == '__main__':
     pyglet.resource.path.append('assets')

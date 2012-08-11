@@ -1,8 +1,3 @@
-'''
-Created on Jul 25, 2012
-
-@author: mcgillij
-'''
 from cocos.layer import Layer, ColorLayer
 from cocos.text import Label
 import pyglet
@@ -78,8 +73,6 @@ class HUD(Layer):
     def show_message(self, message, callback = None):
         self.get('message').show_message(message, callback)
 
-
-
 class ScoresLayer(ColorLayer):
     FONT_SIZE = 30
     is_event_handler = True
@@ -111,6 +104,3 @@ class ScoresLayer(ColorLayer):
     def on_mouse_release(self, x, y, b, m):
         self.parent.switch_to(0)
         return True
-    
-if __name__ == '__main__':
-    pass

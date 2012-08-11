@@ -1,8 +1,3 @@
-'''
-Created on Jul 25, 2012
-
-@author: mcgillij
-'''
 from cocos.menu import *
 from cocos.director import *
 import pyglet
@@ -14,7 +9,7 @@ from gamelayers import HUD, BackgroundLayer
 
 class OptionsMenu( Menu ):
     def __init__(self):
-        super( OptionsMenu, self).__init__('TITLE!WEUROUOU') 
+        super( OptionsMenu, self).__init__('Options') 
         #self.select_sound = soundex.load('move.mp3')
 
         # you can override the font that will be used for the title and the items
@@ -56,7 +51,7 @@ class OptionsMenu( Menu ):
 class MainMenu( Menu ):
 
     def __init__(self):
-        super( MainMenu, self).__init__('TEST_TITLE') 
+        super( MainMenu, self).__init__('PyGauntlet') 
 
         #self.select_sound = soundex.load('move.mp3')
 
@@ -100,7 +95,6 @@ class MainMenu( Menu ):
 
     def on_quit(self):
         pyglet.app.exit()
-        
 
 def get_newgame():
     scene = Scene()
@@ -113,8 +107,3 @@ def get_newgame():
     scene.add(BackgroundLayer(), z=0, name='background')
     scene.add(view, z=2, name='view')
     return scene
-
-
-
-if __name__ == '__main__':
-    pass

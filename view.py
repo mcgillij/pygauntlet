@@ -1,8 +1,3 @@
-'''
-Created on Jul 25, 2012
-
-@author: mcgillij
-'''
 from cocos.layer import Layer, ColorLayer
 from cocos.director import director
 from pyglet.gl import glPushMatrix, glPopMatrix
@@ -17,20 +12,20 @@ class View(Layer):
         color_layer = ColorLayer( 112, 66, 20, 50, width = width, height=height )
         self.add(color_layer, z=-1)
         self.model = model
+        #self.add(self.model.player, z=2)
         self.hud = hud
         self.model.push_handlers( # win / gameover / various in game effects
                                   self.on_level_complete,
                                   self.on_new_level,
                                   self.on_game_over,
                                   self.on_win,
-                                  self.on_tie,
                                   )
-        self.hud.show_message( ' Get ready', self.model.start())
+        self.hud.show_message( 'Get ready', self.model.start())
 
     def on_enter(self):
         super(View, self).on_enter()
         #do sound stuff
-        
+
     def on_exit(self):
         super(View, self).on_exit()
         #stop sound
@@ -57,22 +52,9 @@ class View(Layer):
         self.parent.add(GameOver(win='lose'), z=10)
         return True
 
-    def on_tie(self):
-        self.parent.add(GameOver(win='tie'), z=10)
-
     def draw(self):
         glPushMatrix()
         self.transform()
-
-        for c in self.model.player_choices:
-            c.draw()
-
-        if self.model.choice:
-            self.model.choice.draw()
-        if self.model.cpu_choice:
-            self.model.cpu_choice.draw()
-            #self.model.gameobject.draw()
+        self.model.player.draw()
+        #print self.model.player.move_up
         glPopMatrix()
-
-if __name__ == '__main__':
-    pass

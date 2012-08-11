@@ -1,8 +1,3 @@
-'''
-Created on Jul 25, 2012
-
-@author: mcgillij
-'''
 __all__ = ['status']
 class Status(object):
     def __init__(self):

@@ -1,8 +1,3 @@
-'''
-Created on Jul 25, 2012
-
-@author: mcgillij
-'''
 from cocos.layer import ColorLayer
 from cocos.director import director
 import pyglet
@@ -44,6 +39,3 @@ class GameOver(ColorLayer):
 
     def on_mouse_release(self, x, y, b, m):
         return
-
-if __name__ == '__main__':
-    pass
