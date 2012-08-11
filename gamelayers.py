@@ -85,7 +85,7 @@ class ScoresLayer(ColorLayer):
         self.font_title['color'] = (204, 164, 164, 255)
         self.font_title['anchor_x'] = 'center'
         self.font_title['anchor_y'] = 'top'
-        title = Label('TEST TITLE', **self.font_title)
+        title = Label('Scores!', **self.font_title)
         title.position = (width/2.0, height)
         self.add(title, z=1)
         self.table = None

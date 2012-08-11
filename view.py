@@ -2,6 +2,7 @@ from cocos.layer import Layer, ColorLayer
 from cocos.director import director
 from pyglet.gl import glPushMatrix, glPopMatrix
 from gameover import GameOver
+import pyglet
 from cocos.actions import StopGrid
 
 class View(Layer):
@@ -24,10 +25,12 @@ class View(Layer):
 
     def on_enter(self):
         super(View, self).on_enter()
+        director.window.set_mouse_visible(False) # hide the mouse with the direct pyglet.window call
         #do sound stuff
 
     def on_exit(self):
         super(View, self).on_exit()
+        director.window.set_mouse_visible(True)
         #stop sound
 
     def on_level_complete(self):
