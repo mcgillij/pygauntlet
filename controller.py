@@ -5,6 +5,7 @@ Created on Jul 25, 2012
 '''
 from cocos.layer import Layer
 import pyglet
+from cocos.director import director
 #from status import status
 
 class Controller( Layer ):
@@ -20,10 +21,9 @@ class Controller( Layer ):
         # add some keyboard bindings here
         if k == pyglet.window.key.SPACE:
             print "pressed space"
-            #self.model.set_choice()
-        if k == pyglet.window.key.ESCAPE:
-            print "pressed esc trying to switch back"
-            self.parent.switch_to(0)
+        #if k == pyglet.window.key.ESCAPE:
+        #    print "pressed esc trying to switch back"
+        #    self.parent.switch_to(0)
         if self.paused:
             return False
         if self.used_key:
@@ -32,7 +32,6 @@ class Controller( Layer ):
         return True
 
     def on_mouse_release(self, x, y, button, modifiers):
-        from cocos.director import director
         vx, vy = director.get_virtual_coordinates(x, y)
         for c in self.model.player_choices:
             rect = c.get_rect()

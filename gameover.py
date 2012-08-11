@@ -41,5 +41,9 @@ class GameOver(ColorLayer):
         if (k == pyglet.window.key.ESCAPE):
             director.pop()
             return True
+
+    def on_mouse_release(self, x, y, b, m):
+        return
+
 if __name__ == '__main__':
     pass

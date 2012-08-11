@@ -23,6 +23,7 @@ class View(Layer):
                                   self.on_new_level,
                                   self.on_game_over,
                                   self.on_win,
+                                  self.on_tie,
                                   )
         self.hud.show_message( ' Get ready', self.model.start())
 
@@ -48,6 +49,7 @@ class View(Layer):
         return True
 
     def on_game_over(self):
+        #director.replace(GameOver(win='win'))
         self.parent.add(GameOver(win='win'), z=10)
         return True
 

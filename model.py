@@ -96,6 +96,7 @@ class Model(pyglet.event.EventDispatcher):
         print self.cpu_choice.value
         if self.choice.value == self.cpu_choice.value:
             # tie
+            print "tie"
             self.controller().pause_controller()
             self.dispatch_event('on_tie')
         elif self.did_i_win():
