@@ -5,13 +5,21 @@ from cocos.euclid import Point2
 from cocos.sprite import Sprite
 from random import choice
 
+import bulletml
+import math
+import os
+
 TW = 32
+
+def distance(a, b):
+    return math.sqrt((a.x/2-b.x)**2 + (a.y/2-b.y)**2)
 
 class Model(pyglet.event.EventDispatcher):
     def __init__(self):
         super(Model, self).__init__()
         self.cursor = Cursor()
         self.player = Player()
+        self.doc = self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'double_spinny_pants.xml'), "rU"))
         #self.level = Level()
         status.reset()
         #set test level
@@ -35,23 +43,6 @@ class Model(pyglet.event.EventDispatcher):
         #self.level = Level()
         pass
 
-    def move_player(self):
-        multiplier = 1
-        if self.player.sprinting:
-            multiplier = 2
-        if self.player.move_up:
-            print "moving up"
-            self.player.y = self.player.y + self.player.speed * multiplier
-        if self.player.move_down:
-            print "moving down"
-            self.player.y = self.player.y - self.player.speed * multiplier
-        if self.player.move_left:
-            print "moving left"
-            self.player.x = self.player.x - self.player.speed * multiplier
-        if self.player.move_right:
-            print "moving right"
-            self.player.x = self.player.x + self.player.speed * multiplier
-
 Model.register_event_type('on_level_complete')
 Model.register_event_type('on_new_level')
 Model.register_event_type('on_game_over')
@@ -70,7 +61,27 @@ class Player(Sprite):
         self.move_right = False
         self.attacking = False
         self.speed = 3
-        
+        self.active_bullets = set([])
+        self.target = bulletml.Bullet()
+        self.shooting = False
+
+    def move(self):
+        multiplier = 1
+        if self.sprinting:
+            multiplier = 2
+        if self.move_up:
+            print "moving up"
+            self.y = self.y + self.speed * multiplier
+        if self.move_down:
+            print "moving down"
+            self.y = self.y - self.speed * multiplier
+        if self.move_left:
+            print "moving left"
+            self.x = self.x - self.speed * multiplier
+        if self.move_right:
+            print "moving right"
+            self.x = self.x + self.speed * multiplier
+
 class Cursor(Sprite):
     def __init__(self):
         super(Cursor, self).__init__('shotgun.png')
