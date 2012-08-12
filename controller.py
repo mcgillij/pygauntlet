@@ -57,7 +57,6 @@ class Controller( Layer ):
         if k == pyglet.window.key.LSHIFT:
             # running
             self.model.player.sprinting = False
-        
 
     def on_mouse_press(self, x, y, button, modifiers):
         vx, vy = director.get_virtual_coordinates(x, y)
@@ -92,8 +91,6 @@ class Controller( Layer ):
     def step(self, dt):
         self.model.cursor.update(self.mouse_pos[0], self.mouse_pos[1])
         self.elapsed += dt
-        #print self.elapsed
-        
         update_speed = 0.01
         if self.elapsed > update_speed:
             self.elapsed = 0
@@ -101,7 +98,7 @@ class Controller( Layer ):
 
         if self.model.player.shooting:
             self.model.player.target.x, self.model.player.target.y = self.mouse_pos[0]/2, self.mouse_pos[1]/2
-            #self.model.player.target.px, self.model.player.target.py = self.model.player.target.x, self.model.player.target.y 
+            self.model.player.target.px, self.model.player.target.py = self.model.player.target.x, self.model.player.target.y 
             source = bulletml.Bullet.FromDocument(self.model.doc, x=self.model.player.x/2, y=self.model.player.y/2, target=self.model.player.target, rank=0.5, speed=10)
             source.vanished = True
             self.model.player.active_bullets.add(source)

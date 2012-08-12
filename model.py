@@ -37,10 +37,8 @@ class Model(pyglet.event.EventDispatcher):
         # do stuff to load new level
         self.dispatch_event("on_new_level")
 
-
-
     def init(self):
-        # set base conditions so we can load a new level
+        #set base conditions so we can load a new level
         #self.player = Player()
         #self.level = Level()
         pass

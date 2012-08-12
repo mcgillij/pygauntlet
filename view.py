@@ -95,10 +95,7 @@ class View(Layer):
         self.update_bullet_batch()
         glPushMatrix()
         self.transform()
-        
         self.model.player.draw()
         self.model.cursor.draw()
-        
         self.bullet_batch.draw()
-        #print self.model.player.move_up
         glPopMatrix()
