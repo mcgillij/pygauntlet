@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<!DOCTYPE bulletml SYSTEM "http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/bulletml.dtd">
+
+<bulletml xmlns="http://www.asahi-net.or.jp/~cs8k-cyu/bulletml"
+	  xmlns:py="http://code.google.com/p/python-bulletml/">
+  <action label="top">
+    <py:if><py:cond>$rand > 0.7</py:cond>
+      <py:then><fire><bullet/><py:appearance>red</py:appearance></fire></py:then>
+      <py:else>
+	<py:if><py:cond>$rand > 0.5</py:cond>
+	  <py:then><fire><bullet/><py:appearance>blue</py:appearance></fire></py:then>
+	  <py:else><fire><bullet/><py:appearance>green</py:appearance></fire></py:else>
+	</py:if>
+      </py:else>
+    </py:if>
+  </action>
+</bulletml>

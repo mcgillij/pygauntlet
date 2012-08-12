@@ -3,7 +3,8 @@ import pyglet
 from cocos.director import director
 #from status import status
 import bulletml
-
+from model import Mob
+import random
 class Controller( Layer ):
     is_event_handler = True
     def __init__(self, model):
@@ -95,11 +96,21 @@ class Controller( Layer ):
         if self.elapsed > update_speed:
             self.elapsed = 0
             self.model.player.move()
+            self.model.player_target.x, self.model.player_target.y = (self.model.player.x /2, self.model.player.y /2)
+            
+            for m in self.model.mobs[:]:
+                if m.offscreen:
+                    self.model.remove(m)
+                else:
+                    m.move(self.model.player.x, self.model.player.y)
+                    source = bulletml.Bullet.FromDocument(m.doc, x=m.x/2, y=m.y/2, target=self.model.player_target, rank=0.5, speed=5)
+                    source.vanished = True
+                    self.model.mob_active_bullets.add(source)
 
         if self.model.player.shooting:
             self.model.player.target.x, self.model.player.target.y = self.mouse_pos[0]/2, self.mouse_pos[1]/2
             self.model.player.target.px, self.model.player.target.py = self.model.player.target.x, self.model.player.target.y 
-            source = bulletml.Bullet.FromDocument(self.model.doc, x=self.model.player.x/2, y=self.model.player.y/2, target=self.model.player.target, rank=0.5, speed=10)
+            source = bulletml.Bullet.FromDocument(self.model.player.doc, x=self.model.player.x/2, y=self.model.player.y/2, target=self.model.player.target, rank=0.5, speed=10)
             source.vanished = True
             self.model.player.active_bullets.add(source)
         w,h = director.get_window_size()
@@ -111,6 +122,22 @@ class Controller( Layer ):
                 or not (0 < obj.x < w)
                 or not (0 < obj.y < h)):
                 self.model.player.active_bullets.remove(obj)
+
+        m_active = list(self.model.mob_active_bullets)
+        for obj in m_active:
+            new = obj.step()
+            self.model.mob_active_bullets.update(new)
+            if (obj.finished 
+                or not (0 < obj.x < w)
+                or not (0 < obj.y < h)):
+                self.model.mob_active_bullets.remove(obj)
+
+        self.model.mob_spawn_counter += 1
+        if self.model.mob_spawn_counter == self.model.mob_spawn_rate:
+            self.model.mob_spawn_counter = 0
+            m = Mob()
+            m.position = (random.randint(0, w), h)
+            self.model.mobs.append(m)
 
     def draw(self):
         pass

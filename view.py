@@ -69,6 +69,7 @@ class View(Layer):
         return True
 
     def update_bullet_batch(self):
+        pyglet.gl.glPointSize(4.0)
         self.bullet_batch = pyglet.graphics.Batch()
         vert_l = []
         c = []
@@ -88,13 +89,35 @@ class View(Layer):
                     c.append(255)
                     c.append(255)
                     c.append(0)
-        pyglet.gl.glPointSize(4.0)
+
+        self.bullet_batch.add(len(vert_l)/2, pyglet.gl.GL_POINTS, None, ('v2f\static', vert_l ) , ('c3B\static', c))
+
+        vert_l = []
+        c = []
+        for obj in self.model.mob_active_bullets:
+            try:
+                x, y = obj.x, obj.y
+            except AttributeError:
+                pass
+            else:
+                if not obj.vanished:
+                    x *= 2
+                    y *= 2
+                    x -= 1
+                    y -= 1
+                    vert_l.append(x)
+                    vert_l.append(y)
+                    c.append(255)
+                    c.append(0)
+                    c.append(255)
         self.bullet_batch.add(len(vert_l)/2, pyglet.gl.GL_POINTS, None, ('v2f\static', vert_l ) , ('c3B\static', c))
 
     def draw(self):
         self.update_bullet_batch()
         glPushMatrix()
         self.transform()
+        for m in self.model.mobs:
+            m.draw()
         self.model.player.draw()
         self.model.cursor.draw()
         self.bullet_batch.draw()

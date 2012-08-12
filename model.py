@@ -19,7 +19,11 @@ class Model(pyglet.event.EventDispatcher):
         super(Model, self).__init__()
         self.cursor = Cursor()
         self.player = Player()
-        self.doc = self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'double_spinny_pants.xml'), "rU"))
+        self.player_target = bulletml.Bullet() # This is what the mobs shoot at.
+        self.mobs = []
+        self.mob_active_bullets = set([])
+        self.mob_spawn_rate = 50
+        self.mob_spawn_counter = 0
         #self.level = Level()
         status.reset()
         #set test level
@@ -61,11 +65,11 @@ class Player(Sprite):
         self.move_down = False
         self.move_left = False
         self.move_right = False
-        self.attacking = False
         self.speed = 3
         self.active_bullets = set([])
         self.target = bulletml.Bullet()
         self.shooting = False
+        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'double_spinny_pants.xml'), "rU"))
 
     def move(self):
         multiplier = 1
@@ -94,3 +98,20 @@ class Cursor(Sprite):
 class Mob(Sprite):
     def __init__(self):
         super(Mob, self).__init__('mob.png')
+        self.position = (200, 200)
+        self.offscreen = False
+        self.speed = 3
+        self.active_bullets = set([])
+        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'towards.xml'), "rU"))
+
+    def move(self, px, py):
+        if self.x < 0 or self.y < 0:
+            self.offscreen = True
+        if self.x > px:
+            self.x = self.x - self.speed
+        if self.x < px: 
+            self.x = self.x + self.speed
+        if self.y > py:
+            self.y = self.y - self.speed
+        if self.y < py: 
+            self.y = self.y + self.speed
