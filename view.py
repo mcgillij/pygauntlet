@@ -60,12 +60,11 @@ class View(Layer):
         return True
 
     def on_game_over(self):
-        #director.replace(GameOver(win='win'))
-        self.parent.add(GameOver(win='win'), z=10)
+        self.parent.add(GameOver(win=False), z=10)
         return True
 
     def on_win(self):
-        self.parent.add(GameOver(win='lose'), z=10)
+        self.parent.add(GameOver(win=True), z=10)
         return True
 
     def update_bullet_batch(self):
@@ -120,5 +119,6 @@ class View(Layer):
             m.draw()
         self.model.player.draw()
         self.model.cursor.draw()
+        self.model.target.draw()
         self.bullet_batch.draw()
         glPopMatrix()

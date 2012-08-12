@@ -4,21 +4,18 @@ from status import status
 from cocos.euclid import Point2
 from cocos.sprite import Sprite
 from random import choice
-
+from cocos import director
 import bulletml
-import math
 import os
 
 TW = 32
-
-def distance(a, b):
-    return math.sqrt((a.x/2-b.x)**2 + (a.y/2-b.y)**2)
 
 class Model(pyglet.event.EventDispatcher):
     def __init__(self):
         super(Model, self).__init__()
         self.cursor = Cursor()
         self.player = Player()
+        self.target = Target()
         self.player_target = bulletml.Bullet() # This is what the mobs shoot at.
         self.mobs = []
         self.mob_active_bullets = set([])
@@ -45,7 +42,7 @@ class Model(pyglet.event.EventDispatcher):
         #set base conditions so we can load a new level
         #self.player = Player()
         #self.level = Level()
-        pass
+        status.reset()
 
 Model.register_event_type('on_level_complete')
 Model.register_event_type('on_new_level')
@@ -69,7 +66,8 @@ class Player(Sprite):
         self.active_bullets = set([])
         self.target = bulletml.Bullet()
         self.shooting = False
-        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'double_spinny_pants.xml'), "rU"))
+        #self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'double_spinny_pants.xml'), "rU"))
+        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'towards.xml'), "rU"))
 
     def move(self):
         multiplier = 1
@@ -107,6 +105,22 @@ class Mob(Sprite):
     def move(self, px, py):
         if self.x < 0 or self.y < 0:
             self.offscreen = True
+        if self.x > px:
+            self.x = self.x - self.speed
+        if self.x < px: 
+            self.x = self.x + self.speed
+        if self.y > py:
+            self.y = self.y - self.speed
+        if self.y < py: 
+            self.y = self.y + self.speed
+
+class Target(Sprite):
+    def __init__(self):
+        super(Target, self).__init__('paper.png')
+        self.position = (200, 200)
+        self.speed = 3
+        
+    def move(self, px, py):
         if self.x > px:
             self.x = self.x - self.speed
         if self.x < px: 

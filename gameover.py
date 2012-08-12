@@ -10,15 +10,12 @@ class GameOver(ColorLayer):
         super(GameOver, self).__init__(32, 32, 32, 64)
         width, height = director.get_window_size()
 
-        if win == 'win':
+        if win:
             #play win sound
             msg = 'You win!'
-        elif win == 'lose':
+        else:
             #play fail sound
             msg = 'Game Over Man!'
-        else: #tie
-            print "tie"
-            msg = 'Tie! Awe Muffin!'
 
         label = Label(msg, font_name='Times New Roman', font_size=54, anchor_x='center', anchor_y='center')
         label.position = (width/2.0, height/2.0)

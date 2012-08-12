@@ -5,6 +5,10 @@ from cocos.director import director
 import bulletml
 from model import Mob
 import random
+import math
+from bulletml.collision import collides_all
+from status import status
+
 class Controller( Layer ):
     is_event_handler = True
     def __init__(self, model):
@@ -96,20 +100,21 @@ class Controller( Layer ):
         if self.elapsed > update_speed:
             self.elapsed = 0
             self.model.player.move()
-            self.model.player_target.x, self.model.player_target.y = (self.model.player.x /2, self.model.player.y /2)
-            
+            self.model.player_target.x, self.model.player_target.y = (self.model.player.x, self.model.player.y)
+            self.model.target.position = self.model.player_target.x, self.model.player_target.y
+
             for m in self.model.mobs[:]:
                 if m.offscreen:
-                    self.model.remove(m)
+                    self.model.mobs.remove(m)
                 else:
                     m.move(self.model.player.x, self.model.player.y)
-                    source = bulletml.Bullet.FromDocument(m.doc, x=m.x/2, y=m.y/2, target=self.model.player_target, rank=0.5, speed=5)
+                    source = bulletml.Bullet.FromDocument(m.doc, x=m.x/2, y=m.y/2, target=self.model.player_target, rank=1, speed=5)
                     source.vanished = True
                     self.model.mob_active_bullets.add(source)
 
         if self.model.player.shooting:
             self.model.player.target.x, self.model.player.target.y = self.mouse_pos[0]/2, self.mouse_pos[1]/2
-            self.model.player.target.px, self.model.player.target.py = self.model.player.target.x, self.model.player.target.y 
+            #self.model.player.target.px, self.model.player.target.py = self.model.player.target.x, self.model.player.target.y 
             source = bulletml.Bullet.FromDocument(self.model.player.doc, x=self.model.player.x/2, y=self.model.player.y/2, target=self.model.player.target, rank=0.5, speed=10)
             source.vanished = True
             self.model.player.active_bullets.add(source)
@@ -131,6 +136,22 @@ class Controller( Layer ):
                 or not (0 < obj.x < w)
                 or not (0 < obj.y < h)):
                 self.model.mob_active_bullets.remove(obj)
+        mob_collides = False
+        player_collides = False
+
+        if m_active:
+            mob_collides = collides_all(self.model.player, m_active)
+
+        if p_active:
+            for m in self.model.mobs[:]:
+                for p in p_active:
+                    if distance(m, p) < 5:
+                        status.score += 100
+                        p.vanished = True
+                        m.offscreen = True
+
+        if mob_collides: # bullet collision check
+            self.model.dispatch_event('on_game_over')
 
         self.model.mob_spawn_counter += 1
         if self.model.mob_spawn_counter == self.model.mob_spawn_rate:
@@ -141,3 +162,6 @@ class Controller( Layer ):
 
     def draw(self):
         pass
+
+def distance(a, b):
+    return math.sqrt((a.x/2-b.x)**2 + (a.y/2-b.y)**2)
