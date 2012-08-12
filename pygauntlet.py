@@ -1,7 +1,7 @@
 from cocos.scene import Scene
 from cocos.layer import MultiplexLayer
 from cocos.director import director
-from gamelayers import BackgroundLayer, ScoresLayer
+from gamelayers import BackgroundLayer, HiScoresLayer
 from menus import MainMenu, OptionsMenu
 import pyglet
 
@@ -14,7 +14,7 @@ if __name__ == '__main__':
     scene.add(MultiplexLayer(
                              MainMenu(),
                              OptionsMenu(),
-                             ScoresLayer(),
+                             HiScoresLayer(),
                              ), z=1)
     scene.add(BackgroundLayer(), z=0)
     director.run(scene)

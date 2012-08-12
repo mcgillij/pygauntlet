@@ -104,6 +104,7 @@ def get_newgame():
     hud = HUD()
     view = View(model, hud)
     scene.add(controller, z=1, name='controller')
+    scene.add(hud, z=3, name='hud')
     scene.add(BackgroundLayer(), z=0, name='background')
     scene.add(view, z=2, name='view')
     return scene

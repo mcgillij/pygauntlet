@@ -29,19 +29,19 @@ class ScoreLayer(Layer):
                            anchor_y='bottom')
         self.score.position = (0, 0)
         self.add(self.score)
-        self.level = Label('Level:', font_size=36,
-                         font_name = 'Times New Roman',
-                         color = (255, 255, 255, 255),
-                         anchor_x = 'left',
-                         anchor_y = 'bottom')
-        self.add(self.level)
+        #self.level = Label('Level:', font_size=36,
+        #                 font_name = 'Times New Roman',
+         #                color = (255, 255, 255, 255),
+         #                anchor_x = 'left',
+         #                anchor_y = 'bottom')
+        #self.add(self.level)
 
     def draw(self):
         super(ScoreLayer, self).draw()
         self.score.element.text = 'Score:%d' % status.score
         
-        level = status.level_index or 0
-        self.level.element.text = 'Level:%d', level
+        #level = status.level_index or 0
+        #self.level.element.text = 'Level:%d', level
         
 class MessageLayer(Layer):
     def show_message(self, message, callback=None):
@@ -73,12 +73,12 @@ class HUD(Layer):
     def show_message(self, message, callback = None):
         self.get('message').show_message(message, callback)
 
-class ScoresLayer(ColorLayer):
+class HiScoresLayer(ColorLayer):
     FONT_SIZE = 30
     is_event_handler = True
     def __init__(self):
         width, height = director.get_window_size()
-        super(ScoresLayer, self).__init__(32, 32, 32, 16, width=width, height=height-86)
+        super(HiScoresLayer, self).__init__(32, 32, 32, 16, width=width, height=height-86)
         self.font_title = {}
         self.font_title['font_name'] = 'Times New Roman'
         self.font_title['font_size'] = 72
@@ -91,7 +91,7 @@ class ScoresLayer(ColorLayer):
         self.table = None
 
     def on_enter(self):
-        super(ScoresLayer, self).on_enter()
+        super(HiScoresLayer, self).on_enter()
         #scores = do score stuffs
         #if self.table:
         #    self.remove_old

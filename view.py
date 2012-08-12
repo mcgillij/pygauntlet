@@ -15,13 +15,26 @@ class View(Layer):
         self.model = model
         #self.add(self.model.player, z=2)
         self.hud = hud
+        self.bullet_batch = None
         self.model.push_handlers( # win / gameover / various in game effects
                                   self.on_level_complete,
                                   self.on_new_level,
                                   self.on_game_over,
                                   self.on_win,
+                                  self.on_pause,
+                                  self.on_resume,
                                   )
         self.hud.show_message( 'Get ready', self.model.start())
+
+    def on_pause(self):
+        self.hud.show_message('Paused!')
+        self.model.controller().pause_controller()
+        director.window.set_mouse_visible(True) 
+
+    def on_resume(self):
+        self.hud.show_message('Resuming')
+        self.model.controller().resume_controller()
+        director.window.set_mouse_visible(False)
 
     def on_enter(self):
         super(View, self).on_enter()
@@ -55,10 +68,8 @@ class View(Layer):
         self.parent.add(GameOver(win='lose'), z=10)
         return True
 
-    def draw(self):
-        red = (1, 0, 0, 1)
-        bullet_batch = pyglet.graphics.Batch()
-        pyglet.gl.glPointSize(4.0)
+    def update_bullet_batch(self):
+        self.bullet_batch = pyglet.graphics.Batch()
         vert_l = []
         c = []
         for obj in self.model.player.active_bullets:
@@ -77,13 +88,17 @@ class View(Layer):
                     c.append(255)
                     c.append(255)
                     c.append(0)
-        bullet_batch.add(len(vert_l)/2, pyglet.gl.GL_POINTS, None, ('v2f\static', vert_l ) , ('c3B\static', c))
+        pyglet.gl.glPointSize(4.0)
+        self.bullet_batch.add(len(vert_l)/2, pyglet.gl.GL_POINTS, None, ('v2f\static', vert_l ) , ('c3B\static', c))
+
+    def draw(self):
+        self.update_bullet_batch()
         glPushMatrix()
         self.transform()
-        bullet_batch.draw()
+        
         self.model.player.draw()
         self.model.cursor.draw()
         
-        
+        self.bullet_batch.draw()
         #print self.model.player.move_up
         glPopMatrix()

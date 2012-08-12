@@ -37,6 +37,8 @@ class Model(pyglet.event.EventDispatcher):
         # do stuff to load new level
         self.dispatch_event("on_new_level")
 
+
+
     def init(self):
         # set base conditions so we can load a new level
         #self.player = Player()
@@ -47,6 +49,8 @@ Model.register_event_type('on_level_complete')
 Model.register_event_type('on_new_level')
 Model.register_event_type('on_game_over')
 Model.register_event_type('on_win')
+Model.register_event_type('on_pause')
+Model.register_event_type('on_resume')
 
 # add other event types / clicks as events here
 
@@ -70,16 +74,16 @@ class Player(Sprite):
         if self.sprinting:
             multiplier = 2
         if self.move_up:
-            print "moving up"
+            #print "moving up"
             self.y = self.y + self.speed * multiplier
         if self.move_down:
-            print "moving down"
+            #print "moving down"
             self.y = self.y - self.speed * multiplier
         if self.move_left:
-            print "moving left"
+            #print "moving left"
             self.x = self.x - self.speed * multiplier
         if self.move_right:
-            print "moving right"
+            #print "moving right"
             self.x = self.x + self.speed * multiplier
 
 class Cursor(Sprite):

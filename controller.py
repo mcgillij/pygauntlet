@@ -8,16 +8,21 @@ class Controller( Layer ):
     is_event_handler = True
     def __init__(self, model):
         super(Controller, self).__init__()
-        self.used_key = False
-        self.paused = True
+        self.paused = False
         self.model = model
         self.elapsed = 0
         self.mouse_pos = self.model.cursor.position
 
     def on_key_press(self, k, m):
-        # add some keyboard bindings here
         if k == pyglet.window.key.SPACE:
-            print "pressed space"
+            self.paused ^= True
+            if self.paused:
+                self.model.dispatch_event("on_pause")
+            else:
+                self.model.dispatch_event("on_resume")
+        if self.paused:
+            return False
+
         if k == pyglet.window.key.W:
             # move the player up
             self.model.player.move_up = True
@@ -33,14 +38,10 @@ class Controller( Layer ):
         if k == pyglet.window.key.LSHIFT:
             # running
             self.model.player.sprinting = True
-        if self.paused:
-            return False
-        if self.used_key:
-            return False
-        self.used_key = True
         return True
 
     def on_key_release(self, k, m):
+
         if k == pyglet.window.key.W:
             # move the player up
             self.model.player.move_up = False
@@ -56,27 +57,29 @@ class Controller( Layer ):
         if k == pyglet.window.key.LSHIFT:
             # running
             self.model.player.sprinting = False
+        
 
     def on_mouse_press(self, x, y, button, modifiers):
-        self.mouse_pos = (x, y)
-        self.model.player.shooting = True
         vx, vy = director.get_virtual_coordinates(x, y)
-    
+        self.mouse_pos = (vx, vy)
+        self.model.player.shooting = True
+
     def on_mouse_motion(self, x, y, dx, dy):
-        self.mouse_pos = (x, y)
+        vx, vy = director.get_virtual_coordinates(x, y)
+        self.mouse_pos = (vx, vy)
     
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        self.mouse_pos = (x, y)
+        vx, vy = director.get_virtual_coordinates(x, y)
+        self.mouse_pos = (vx, vy)
         if buttons & pyglet.window.mouse.LEFT:
             self.model.player.shooting = True
 
     def on_mouse_release(self, x, y, button, modifiers):
-        self.mouse_pos = (x, y)
+        vx, vy = director.get_virtual_coordinates(x, y)
+        self.mouse_pos = (vx, vy)
         self.model.player.shooting = False
         """ call the shoot function in the direction of the mouse 
         cursor originating from the players location """
-        vx, vy = director.get_virtual_coordinates(x, y)
-        
 
     def pause_controller(self):
         self.paused = True
@@ -90,6 +93,7 @@ class Controller( Layer ):
         self.model.cursor.update(self.mouse_pos[0], self.mouse_pos[1])
         self.elapsed += dt
         #print self.elapsed
+        
         update_speed = 0.01
         if self.elapsed > update_speed:
             self.elapsed = 0
@@ -111,7 +115,5 @@ class Controller( Layer ):
                 or not (0 < obj.y < h)):
                 self.model.player.active_bullets.remove(obj)
 
-        # add stuff with timesteps here
-
     def draw(self):
-        self.used_key = False
+        pass
