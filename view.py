@@ -1,9 +1,9 @@
+import pyglet
+from pyglet.gl import glPushMatrix, glPopMatrix
 from cocos.layer import Layer, ColorLayer
 from cocos.director import director
-from pyglet.gl import glPushMatrix, glPopMatrix
-from gameover import GameOver
-import pyglet
 from cocos.actions import StopGrid
+from gameover import GameOver
 
 class View(Layer):
     def __init__(self, model, hud):
@@ -86,9 +86,9 @@ class View(Layer):
                     y -= 1
                     vert_l.append(x)
                     vert_l.append(y)
-                    c.append(255)
-                    c.append(255)
-                    c.append(0)
+                    c.append(166)
+                    c.append(48)
+                    c.append(48)
 
         self.bullet_batch.add(len(vert_l)/2, pyglet.gl.GL_POINTS, None, ('v2f\static', vert_l ) , ('c3B\static', c))
 

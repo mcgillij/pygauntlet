@@ -1,9 +1,9 @@
+import pyglet
 from cocos.scene import Scene
 from cocos.layer import MultiplexLayer
 from cocos.director import director
 from gamelayers import BackgroundLayer, HiScoresLayer
 from menus import MainMenu, OptionsMenu
-import pyglet
 
 if __name__ == '__main__':
     pyglet.resource.path.append('assets')

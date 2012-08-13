@@ -18,10 +18,10 @@ class OptionsMenu( Menu ):
         self.font_title['color'] = (204,164,164,255)
 
         self.font_item['font_name'] = 'Times New Roman',
-        self.font_item['color'] = (32,16,32,255)
+        self.font_item['color'] = (94,233,239,255)
         self.font_item['font_size'] = 32
         self.font_item_selected['font_name'] = 'Times New Roman'
-        self.font_item_selected['color'] = (32,16,32,255)
+        self.font_item_selected['color'] = (94,233,239,255)
         self.font_item_selected['font_size'] = 46
 
         # you can also override the font size and the colors. see menu.py for
@@ -63,10 +63,11 @@ class MainMenu( Menu ):
         self.font_title['color'] = (204,164,164,255)
 
         self.font_item['font_name'] = 'Times New Roman',
-        self.font_item['color'] = (32,16,32,255)
+        #(32,16,32,255)
+        self.font_item['color'] = (94,233,239,255)
         self.font_item['font_size'] = 32
         self.font_item_selected['font_name'] = 'Times New Roman'
-        self.font_item_selected['color'] = (32,16,32,255)
+        self.font_item_selected['color'] = (94,233,239,255)
         self.font_item_selected['font_size'] = 46
 
 

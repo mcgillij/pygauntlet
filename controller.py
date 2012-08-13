@@ -1,13 +1,12 @@
-from cocos.layer import Layer
-import pyglet
-from cocos.director import director
-#from status import status
-import bulletml
-from model import Mob
 import random
 import math
+import pyglet
+import bulletml
+from cocos.layer import Layer
+from cocos.director import director
 from bulletml.collision import collides_all
 from status import status
+from model import Mob
 
 class Controller( Layer ):
     is_event_handler = True
@@ -19,7 +18,6 @@ class Controller( Layer ):
         self.player_target = bulletml.Bullet()
         self.player_target.x = self.model.player.x
         self.player_target.y = self.model.player.y
-        
         self.mouse_pos = self.model.cursor.position
 
     def on_key_press(self, k, m):
@@ -108,8 +106,7 @@ class Controller( Layer ):
         self.player_target.py = self.player_target.y
         self.player_target.x = self.model.player.x/2
         self.player_target.y = self.model.player.y/2
-        
-        
+
         for m in self.model.mobs[:]:
             if m.offscreen:
                 self.model.mobs.remove(m)
@@ -144,9 +141,7 @@ class Controller( Layer ):
                 or not (0 < obj.y < h)):
                 self.model.mob_active_bullets.remove(obj)
         mob_collides = False
-        player_collides = False
 
-        
         if p_active:
             for m in self.model.mobs[:]:
                 for p in p_active:
@@ -157,7 +152,6 @@ class Controller( Layer ):
 
         if m_active:
             mob_collides = collides_all(self.player_target, m_active)
-
 
         if mob_collides: # bullet collision check
             self.model.dispatch_event('on_game_over')

@@ -1,14 +1,12 @@
-import pyglet
+import os
 import weakref
-from status import status
+from random import choice
+import bulletml
+import pyglet
 from cocos.euclid import Point2
 from cocos.sprite import Sprite
-from random import choice
 from cocos import director
-import bulletml
-import os
-
-TW = 32
+from status import status
 
 class Model(pyglet.event.EventDispatcher):
     def __init__(self):
@@ -53,7 +51,8 @@ Model.register_event_type('on_resume')
 
 class Player(Sprite):
     def __init__(self):
-        super(Player, self).__init__('player.png')
+        ani = pyglet.image.load_animation(os.path.join('assets', 'player.gif'))
+        super(Player, self).__init__(ani)
         self.position = (100, 100)
         self.sprinting = False
         self.move_up = False
