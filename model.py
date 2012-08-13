@@ -15,8 +15,6 @@ class Model(pyglet.event.EventDispatcher):
         super(Model, self).__init__()
         self.cursor = Cursor()
         self.player = Player()
-        self.target = Target()
-        self.player_target = bulletml.Bullet() # This is what the mobs shoot at.
         self.mobs = []
         self.mob_active_bullets = set([])
         self.mob_spawn_rate = 50
@@ -66,8 +64,8 @@ class Player(Sprite):
         self.active_bullets = set([])
         self.target = bulletml.Bullet()
         self.shooting = False
-        #self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'double_spinny_pants.xml'), "rU"))
-        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'towards.xml'), "rU"))
+        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'double_spinny_pants.xml'), "rU"))
+        #self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'towards.xml'), "rU"))
 
     def move(self):
         multiplier = 1
@@ -88,7 +86,7 @@ class Player(Sprite):
 
 class Cursor(Sprite):
     def __init__(self):
-        super(Cursor, self).__init__('shotgun.png')
+        super(Cursor, self).__init__('crosshair.png')
         self.position = (100, 100)
     def update(self, x, y):
         self.position = (x, y)
@@ -100,27 +98,11 @@ class Mob(Sprite):
         self.offscreen = False
         self.speed = 3
         self.active_bullets = set([])
-        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'towards.xml'), "rU"))
+        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'fan.xml'), "rU"))
 
     def move(self, px, py):
         if self.x < 0 or self.y < 0:
             self.offscreen = True
-        if self.x > px:
-            self.x = self.x - self.speed
-        if self.x < px: 
-            self.x = self.x + self.speed
-        if self.y > py:
-            self.y = self.y - self.speed
-        if self.y < py: 
-            self.y = self.y + self.speed
-
-class Target(Sprite):
-    def __init__(self):
-        super(Target, self).__init__('paper.png')
-        self.position = (200, 200)
-        self.speed = 3
-        
-    def move(self, px, py):
         if self.x > px:
             self.x = self.x - self.speed
         if self.x < px: 

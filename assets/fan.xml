@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<!DOCTYPE bulletml SYSTEM "http://www.asahi-net.or.jp/~cs8k-cyu/bulletml/bulletml.dtd">
+
+<bulletml type="vertical" xmlns="http://www.asahi-net.or.jp/~cs8k-cyu/bulletml"
+      xmlns:py="http://code.google.com/p/python-bulletml/">
+
+<action label="top">
+<fire>
+<bulletRef label="fan"/>
+</fire>
+</action>
+
+<changeSpeed>
+ <speed>5</speed>
+ <term>4</term>
+</changeSpeed>
+
+<bullet label="fan">
+<action>
+<changeSpeed>
+ <speed>3</speed>
+ <term>4</term>
+</changeSpeed>
+<wait>1+$rand*20</wait>
+<py:if><py:cond>$rand>0.5</py:cond>
+<py:then><changeDirection>
+      <direction type="relative">15</direction>
+      <term>4</term>
+</changeDirection>
+</py:then>
+<py:else><changeDirection>
+      <direction type="relative">-15</direction>
+      <term>4</term>
+</changeDirection>
+</py:else>
+</py:if>
+
+<wait>1+$rand*40</wait>
+<vanish/>
+</action>
+</bullet>
+
+</bulletml>

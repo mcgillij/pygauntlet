@@ -60,6 +60,7 @@ class View(Layer):
         return True
 
     def on_game_over(self):
+        self.model.controller().pause_controller()
         self.parent.add(GameOver(win=False), z=10)
         return True
 
@@ -119,6 +120,5 @@ class View(Layer):
             m.draw()
         self.model.player.draw()
         self.model.cursor.draw()
-        self.model.target.draw()
         self.bullet_batch.draw()
         glPopMatrix()

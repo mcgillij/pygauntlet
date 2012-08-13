@@ -16,6 +16,10 @@ class Controller( Layer ):
         self.paused = False
         self.model = model
         self.elapsed = 0
+        self.player_target = bulletml.Bullet()
+        self.player_target.x = self.model.player.x
+        self.player_target.y = self.model.player.y
+        
         self.mouse_pos = self.model.cursor.position
 
     def on_key_press(self, k, m):
@@ -95,22 +99,25 @@ class Controller( Layer ):
 
     def step(self, dt):
         self.model.cursor.update(self.mouse_pos[0], self.mouse_pos[1])
-        self.elapsed += dt
-        update_speed = 0.01
-        if self.elapsed > update_speed:
-            self.elapsed = 0
-            self.model.player.move()
-            self.model.player_target.x, self.model.player_target.y = (self.model.player.x, self.model.player.y)
-            self.model.target.position = self.model.player_target.x, self.model.player_target.y
-
-            for m in self.model.mobs[:]:
-                if m.offscreen:
-                    self.model.mobs.remove(m)
-                else:
-                    m.move(self.model.player.x, self.model.player.y)
-                    source = bulletml.Bullet.FromDocument(m.doc, x=m.x/2, y=m.y/2, target=self.model.player_target, rank=1, speed=5)
-                    source.vanished = True
-                    self.model.mob_active_bullets.add(source)
+        #self.elapsed += dt
+        #update_speed = 0.05
+        #if self.elapsed > update_speed:
+        #   self.elapsed = 0
+        self.model.player.move()
+        self.player_target.px = self.player_target.x
+        self.player_target.py = self.player_target.y
+        self.player_target.x = self.model.player.x/2
+        self.player_target.y = self.model.player.y/2
+        
+        
+        for m in self.model.mobs[:]:
+            if m.offscreen:
+                self.model.mobs.remove(m)
+            else:
+                m.move(self.model.player.x, self.model.player.y)
+                source = bulletml.Bullet.FromDocument(m.doc, x=m.x/2, y=m.y/2, target=self.player_target, rank=0.5, speed=20)
+                source.vanished = True
+                self.model.mob_active_bullets.add(source)
 
         if self.model.player.shooting:
             self.model.player.target.x, self.model.player.target.y = self.mouse_pos[0]/2, self.mouse_pos[1]/2
@@ -139,9 +146,7 @@ class Controller( Layer ):
         mob_collides = False
         player_collides = False
 
-        if m_active:
-            mob_collides = collides_all(self.model.player, m_active)
-
+        
         if p_active:
             for m in self.model.mobs[:]:
                 for p in p_active:
@@ -149,6 +154,10 @@ class Controller( Layer ):
                         status.score += 100
                         p.vanished = True
                         m.offscreen = True
+
+        if m_active:
+            mob_collides = collides_all(self.player_target, m_active)
+
 
         if mob_collides: # bullet collision check
             self.model.dispatch_event('on_game_over')
