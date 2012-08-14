@@ -4,7 +4,7 @@ from cocos.layer import Layer, ColorLayer
 from cocos.director import director
 from cocos.actions import StopGrid
 from gameover import GameOver
-import soundex
+import soundpygame
 
 class View(Layer):
     def __init__(self, model, hud):
@@ -42,14 +42,14 @@ class View(Layer):
     def on_enter(self):
         super(View, self).on_enter()
         director.window.set_mouse_visible(False) # hide the mouse with the direct pyglet.window call
-        soundex.set_music('theme.ogg')
-        soundex.play_music()
+        soundpygame.set_music('theme.ogg')
+        soundpygame.play_music()
         #do sound stuff
 
     def on_exit(self):
         super(View, self).on_exit()
         director.window.set_mouse_visible(True)
-        soundex.stop_music()
+        soundpygame.stop_music()
         #stop sound
 
     def on_level_complete(self):
@@ -74,9 +74,9 @@ class View(Layer):
         self.parent.add(GameOver(win=True), z=10)
         return True
     def on_explode(self):
-        soundex.play('Hit_Hurt10.wav')
+        soundpygame.play('Hit_Hurt10.wav')
     def on_shoot(self):
-        soundex.play('Laser_Shoot.wav')
+        soundpygame.play('Laser_Shoot.wav')
         return True
 
     def update_bullet_batch(self):
