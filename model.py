@@ -96,7 +96,7 @@ class Cursor(Sprite):
 class Mob(Sprite):
     def __init__(self):
         super(Mob, self).__init__('mob.png')
-        self.position = (200, 200)
+        #self.position = (200, 200)
         self.offscreen = False
         self.speed = 3
         self.active_bullets = set([])
@@ -119,7 +119,7 @@ class Mob(Sprite):
 class Mob2(Sprite):
     def __init__(self):
         super(Mob2, self).__init__('mob2.png')
-        self.position = (200, 200)
+        #self.position = (200, 200)
         self.offscreen = False
         self.speed = 2
         self.value = 250
@@ -142,7 +142,7 @@ class Mob2(Sprite):
 class Mob3(Sprite):
     def __init__(self):
         super(Mob3, self).__init__('mob3.png')
-        self.position = (200, 200)
+        #self.position = (200, 200)
         self.offscreen = False
         self.speed = 2
         self.value = 500
@@ -165,7 +165,7 @@ class Mob3(Sprite):
 class TARDIS(Sprite):
     def __init__(self):
         super(TARDIS, self).__init__('tardis.png')
-        self.position = (200, 200)
+        #self.position = (200, 200)
         self.offscreen = False
         self.speed = 2
         self.value = 1000
