@@ -25,17 +25,23 @@ class View(Layer):
                                   self.on_pause,
                                   self.on_resume,
                                   self.on_shoot,
-                                  self.on_explode
+                                  self.on_explode,
+                                  self.on_deploy_tardis,
                                   )
         self.hud.show_message( 'Get ready', self.model.start())
+    
+    def on_deploy_tardis(self):
+        self.hud.show_message('TARDIS Deployed!')
 
     def on_pause(self):
         self.hud.show_message('Paused!')
+        self.model.player.loop = False
         self.model.controller().pause_controller()
         director.window.set_mouse_visible(True) 
 
     def on_resume(self):
         self.hud.show_message('Resuming')
+        self.model.player.loop = True
         self.model.controller().resume_controller()
         director.window.set_mouse_visible(False)
 
@@ -66,15 +72,19 @@ class View(Layer):
         return True
 
     def on_game_over(self):
+        soundpygame.play('Explosion4.wav')
         self.model.controller().pause_controller()
         self.parent.add(GameOver(win=False), z=10)
         return True
 
     def on_win(self):
+        self.model.controller().pause_controller()
         self.parent.add(GameOver(win=True), z=10)
         return True
+
     def on_explode(self):
         soundpygame.play('Hit_Hurt10.wav')
+
     def on_shoot(self):
         soundpygame.play('Laser_Shoot.wav')
         return True
@@ -127,6 +137,8 @@ class View(Layer):
         self.update_bullet_batch()
         glPushMatrix()
         self.transform()
+        if self.model.tardis:
+            self.model.tardis.draw()
         for m in self.model.mobs:
             m.draw()
         self.model.player.draw()

@@ -5,7 +5,7 @@ import bulletml
 import pyglet
 from cocos.euclid import Point2
 from cocos.sprite import Sprite
-from cocos import director
+from cocos.director import director
 from status import status
 
 class Model(pyglet.event.EventDispatcher):
@@ -14,6 +14,7 @@ class Model(pyglet.event.EventDispatcher):
         self.cursor = Cursor()
         self.player = Player()
         self.mobs = []
+        self.tardis = None
         self.mob_active_bullets = set([])
         self.mob_spawn_rate = 50
         self.mob_spawn_counter = 0
@@ -48,7 +49,7 @@ Model.register_event_type('on_pause')
 Model.register_event_type('on_resume')
 Model.register_event_type('on_shoot')
 Model.register_event_type('on_explode')
-
+Model.register_event_type('on_deploy_tardis')
 # add other event types / clicks as events here
 
 class Player(Sprite):
@@ -99,10 +100,12 @@ class Mob(Sprite):
         self.offscreen = False
         self.speed = 3
         self.active_bullets = set([])
+        self.value = 100
         self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'fan.xml'), "rU"))
 
     def move(self, px, py):
-        if self.x < 0 or self.y < 0:
+        w, h = director.get_window_size()
+        if self.x < 0 or self.y < 0 or self.x > w or self.y > h:
             self.offscreen = True
         if self.x > px:
             self.x = self.x - self.speed
@@ -112,3 +115,63 @@ class Mob(Sprite):
             self.y = self.y - self.speed
         if self.y < py: 
             self.y = self.y + self.speed
+
+class Mob2(Sprite):
+    def __init__(self):
+        super(Mob2, self).__init__('mob2.png')
+        self.position = (200, 200)
+        self.offscreen = False
+        self.speed = 2
+        self.value = 250
+        self.active_bullets = set([])
+        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'towards.xml'), "rU"))
+
+    def move(self, px, py):
+        w, h = director.get_window_size()
+        if self.x < 0 or self.y < 0 or self.x > w or self.y > h:
+            self.offscreen = True
+        if self.x > px:
+            self.x = self.x - self.speed
+        if self.x < px: 
+            self.x = self.x + self.speed
+        #if self.y > py:
+        #   self.y = self.y - self.speed
+        #if self.y < py: 
+        #    self.y = self.y + self.speed
+
+class Mob3(Sprite):
+    def __init__(self):
+        super(Mob3, self).__init__('mob3.png')
+        self.position = (200, 200)
+        self.offscreen = False
+        self.speed = 2
+        self.value = 500
+        self.active_bullets = set([])
+        self.doc = bulletml.BulletML.FromDocument(open(os.path.join('assets', 'circle.xml'), "rU"))
+
+    def move(self, px, py):
+        w, h = director.get_window_size()
+        if self.x < 0 or self.y < 0 or self.x > w or self.y > h:
+            self.offscreen = True
+        if self.x > px:
+            self.x = self.x - self.speed
+        if self.x < px: 
+            self.x = self.x + self.speed
+        if self.y > py:
+            self.y = self.y - self.speed
+        if self.y < py: 
+            self.y = self.y + self.speed
+
+class TARDIS(Sprite):
+    def __init__(self):
+        super(TARDIS, self).__init__('tardis.png')
+        self.position = (200, 200)
+        self.offscreen = False
+        self.speed = 2
+        self.value = 1000
+
+    def move(self):
+        w, h = director.get_window_size()
+        if self.x < 0 or self.y < 0 or self.x > w or self.y > h:
+            self.offscreen = True
+        self.y = self.y - self.speed

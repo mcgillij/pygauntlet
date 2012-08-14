@@ -14,7 +14,7 @@ class HiScoreData( object ):
 
     def __init__( self ):
         super(HiScoreData, self).__init__()
-
+        self.hi_scores = None
         self.load()
 
     def load(self):
@@ -26,7 +26,7 @@ class HiScoreData( object ):
                 line = line.rstrip()
                 if line.startswith("#") or line == "":
                     continue
-                print line
+                #print line
                 (score,name) = line.split(',')
                 self.hi_scores.append( (int(score),name ) )
             f.close()
@@ -41,13 +41,14 @@ class HiScoreData( object ):
                 f.write('%d,%s\n' % ( i[0],i[1] ) )
             f.close()
         except Exception, e:
-            print 'Could not save hi scores'
-            print e
+            #print 'Could not save hi scores'
+            #print e
+            pass
 
     def add( self, score, name):
         # safe replacement
         if score == "" or name == "":
-            print "bad news"
+            #print "bad news"
             return
         for l in name:
             if not l.isalnum():

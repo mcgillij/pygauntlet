@@ -6,7 +6,7 @@ from cocos.layer import Layer
 from cocos.director import director
 from bulletml.collision import collides_all
 from status import status
-from model import Mob
+from model import Mob, Mob2, Mob3, TARDIS
 
 class Controller( Layer ):
     is_event_handler = True
@@ -84,8 +84,6 @@ class Controller( Layer ):
         vx, vy = director.get_virtual_coordinates(x, y)
         self.mouse_pos = (vx, vy)
         self.model.player.shooting = False
-        """ call the shoot function in the direction of the mouse 
-        cursor originating from the players location """
 
     def pause_controller(self):
         self.paused = True
@@ -96,12 +94,13 @@ class Controller( Layer ):
         self.schedule(self.step)
 
     def step(self, dt):
+        w, h = director.get_window_size()
         self.model.cursor.update(self.mouse_pos[0], self.mouse_pos[1])
-        #self.elapsed += dt
-        #update_speed = 0.05
-        #if self.elapsed > update_speed:
-        #   self.elapsed = 0
         self.model.player.move()
+        if self.model.tardis:
+            self.model.tardis.move()
+            if self.model.tardis.offscreen:
+                self.model.tardis = None
         self.player_target.px = self.player_target.x
         self.player_target.py = self.player_target.y
         self.player_target.x = self.model.player.x/2
@@ -112,9 +111,13 @@ class Controller( Layer ):
                 self.model.mobs.remove(m)
             else:
                 m.move(self.model.player.x, self.model.player.y)
-                source = bulletml.Bullet.FromDocument(m.doc, x=m.x/2, y=m.y/2, target=self.player_target, rank=0.5, speed=20)
-                source.vanished = True
-                self.model.mob_active_bullets.add(source)
+                self.elapsed += dt
+                update_speed = 0.25
+                if self.elapsed > update_speed:
+                    self.elapsed = 0
+                    source = bulletml.Bullet.FromDocument(m.doc, x=m.x/2, y=m.y/2, target=self.player_target, rank=0.5, speed=20)
+                    source.vanished = True
+                    self.model.mob_active_bullets.add(source)
 
         if self.model.player.shooting:
             self.model.dispatch_event("on_shoot")
@@ -148,7 +151,7 @@ class Controller( Layer ):
                 for p in p_active:
                     if distance(m, p) < 5:
                         self.model.dispatch_event("on_explode")
-                        status.score += 100
+                        status.score += m.value
                         p.vanished = True
                         m.offscreen = True
 
@@ -157,13 +160,42 @@ class Controller( Layer ):
 
         if mob_collides: # bullet collision check
             self.model.dispatch_event('on_game_over')
+            return
+        if self.model.tardis:
+            if self.model.tardis.contains(self.model.player.x, self.model.player.y):
+                status.score += self.model.tardis.value
+                self.model.dispatch_event('on_win')
+                return
 
         self.model.mob_spawn_counter += 1
         if self.model.mob_spawn_counter == self.model.mob_spawn_rate:
             self.model.mob_spawn_counter = 0
-            m = Mob()
-            m.position = (random.randint(0, w), h)
+            if status.score < 1000:
+                m = Mob()
+                m.position = (random.randint(0, w), h)
+            elif status.score < 3000:
+                m = random.choice([Mob(), Mob2()])
+                m.position = (random.choice([0, w]), random.randint(0, h))
+            else:
+                m = random.choice([Mob(), Mob2(), Mob3()])
+                m.position = (random.choice([0, w]), random.randint(0, h))
+
             self.model.mobs.append(m)
+            if status.score > 5000 and not self.model.tardis:
+                self.model.tardis = TARDIS()
+                self.model.tardis.position = (random.randint(0, w), h)
+                self.model.dispatch_event('on_deploy_tardis')
+
+
+        # make sure the player isn't off the side of the screen
+        if self.model.player.x > w:
+            self.model.player.x = w
+        if self.model.player.y > h:
+            self.model.player.y = h
+        if self.model.player.x < 0:
+            self.model.player.x = 0
+        if self.model.player.y < 0:
+            self.model.player.y = 0
 
     def draw(self):
         pass
