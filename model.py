@@ -46,6 +46,8 @@ Model.register_event_type('on_game_over')
 Model.register_event_type('on_win')
 Model.register_event_type('on_pause')
 Model.register_event_type('on_resume')
+Model.register_event_type('on_shoot')
+Model.register_event_type('on_explode')
 
 # add other event types / clicks as events here
 

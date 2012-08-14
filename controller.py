@@ -117,6 +117,7 @@ class Controller( Layer ):
                 self.model.mob_active_bullets.add(source)
 
         if self.model.player.shooting:
+            self.model.dispatch_event("on_shoot")
             self.model.player.target.x, self.model.player.target.y = self.mouse_pos[0]/2, self.mouse_pos[1]/2
             #self.model.player.target.px, self.model.player.target.py = self.model.player.target.x, self.model.player.target.y 
             source = bulletml.Bullet.FromDocument(self.model.player.doc, x=self.model.player.x/2, y=self.model.player.y/2, target=self.model.player.target, rank=0.5, speed=10)
@@ -146,6 +147,7 @@ class Controller( Layer ):
             for m in self.model.mobs[:]:
                 for p in p_active:
                     if distance(m, p) < 5:
+                        self.model.dispatch_event("on_explode")
                         status.score += 100
                         p.vanished = True
                         m.offscreen = True

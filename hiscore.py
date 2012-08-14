@@ -23,8 +23,10 @@ class HiScoreData( object ):
             f = open(self.HISCORE_FILENAME)
             for line in f.readlines():
                 # ignore comments
-                if line.startswith("#"):
+                line = line.rstrip()
+                if line.startswith("#") or line == "":
                     continue
+                print line
                 (score,name) = line.split(',')
                 self.hi_scores.append( (int(score),name ) )
             f.close()
@@ -44,6 +46,9 @@ class HiScoreData( object ):
 
     def add( self, score, name):
         # safe replacement
+        if score == "" or name == "":
+            print "bad news"
+            return
         for l in name:
             if not l.isalnum():
                 name = name.replace(l,'_')
