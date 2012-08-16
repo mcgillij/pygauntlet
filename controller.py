@@ -97,6 +97,7 @@ class Controller( Layer ):
         w, h = director.get_window_size()
         self.model.cursor.update(self.mouse_pos[0], self.mouse_pos[1])
         self.model.player.move()
+        self.model.scroller.update(dt)
         if self.model.tardis:
             self.model.tardis.move()
             if self.model.tardis.offscreen:
@@ -190,12 +191,16 @@ class Controller( Layer ):
         # make sure the player isn't off the side of the screen
         if self.model.player.x > w:
             self.model.player.x = w
+            self.model.player.moving_right = False
         if self.model.player.y > h:
             self.model.player.y = h
+            self.model.player.moving_up = False
         if self.model.player.x < 0:
             self.model.player.x = 0
+            self.model.player.moving_left = False
         if self.model.player.y < 0:
             self.model.player.y = 0
+            self.model.player.moving_down = False
 
     def draw(self):
         pass

@@ -9,7 +9,7 @@ if __name__ == '__main__':
     pyglet.resource.path.append('assets')
     pyglet.resource.reindex()
     #pyglet.font.add_directory('assets')
-    director.init(resizable = True, width=600, height=720)
+    director.init(resizable = True, width=800, height=800)
     scene = Scene()
     scene.add(MultiplexLayer(
                              MainMenu(),

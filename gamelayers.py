@@ -1,11 +1,44 @@
-from cocos.layer import Layer, ColorLayer
+from cocos.layer import Layer, ColorLayer, ScrollableLayer, ScrollingManager
 from cocos.text import Label
 import pyglet
+from pyglet.sprite import Sprite
 from pyglet.gl import glPushMatrix, glPopMatrix
 from cocos.director import director
 from cocos.actions import Accelerate, MoveBy, Delay, Hide, CallFunc
 from status import status
 import hiscore
+
+class PygletParallax(Layer):
+    def __init__(self):
+        super(PygletParallax, self).__init__()
+        self.batch = pyglet.graphics.Batch()
+        self.background = pyglet.graphics.OrderedGroup(0)
+        self.foreground = pyglet.graphics.OrderedGroup(1)
+        self.bg = Sprite(pyglet.resource.image('parallax1-1024x1900.png'), batch=self.batch, group=self.background)
+        self.fg = Sprite(pyglet.resource.image('parallax2-1024x768.png'), batch=self.batch, group=self.foreground)
+        self.yspeed = 10
+        self.yscroll = 0
+        self.yscrollb = 0
+        self.bg.x, self.bg.y = 0, 0
+        self.fg.x, self.fg.y = 0, 0
+
+    def update(self, dt):
+        self.yscroll = self.yscroll + self.yspeed
+        if self.yscroll == 320:
+            self.yspeed = -1
+        if self.yscroll == -960:
+            self.yspeed = 2
+        self.yscrollb = self.yscroll
+        if self.yscrollb < -640:
+            self.yscrollb = -640
+        if self.yscrollb > 0:
+            self.yscrollb = 0
+        self.bg.y = self.yscroll
+        self.fg.y = self.yscrollb
+
+    def draw(self):
+        self.batch.draw()
+
 class BackgroundLayer(Layer):
     def __init__(self):
         super(BackgroundLayer, self).__init__()
@@ -29,20 +62,11 @@ class ScoreLayer(Layer):
                            anchor_y='bottom')
         self.score.position = (0, 0)
         self.add(self.score)
-        #self.level = Label('Level:', font_size=36,
-        #                 font_name = 'Times New Roman',
-         #                color = (255, 255, 255, 255),
-         #                anchor_x = 'left',
-         #                anchor_y = 'bottom')
-        #self.add(self.level)
 
     def draw(self):
         super(ScoreLayer, self).draw()
         self.score.element.text = 'Score:%d' % status.score
-        
-        #level = status.level_index or 0
-        #self.level.element.text = 'Level:%d', level
-        
+
 class MessageLayer(Layer):
     def show_message(self, message, callback=None):
         width, height = director.get_window_size()
@@ -58,10 +82,8 @@ class MessageLayer(Layer):
                     Delay(1) +  \
                     Accelerate(MoveBy( (0,-height/2.0), duration=0.5)) + \
                     Hide()
-
         if callback:
             actions += CallFunc( callback )
-
         self.message.do( actions )
 
 class HUD(Layer):
@@ -96,10 +118,8 @@ class HiScoresLayer(ColorLayer):
 
         if self.table:
             self.remove_old()
-
         self.table =[]
         for idx,s in enumerate(scores):
-
             pos= Label( '%d:' % (idx+1), font_name='Times New Roman',
                         font_size=self.FONT_SIZE,
                         anchor_y='top',
@@ -134,13 +154,10 @@ class HiScoresLayer(ColorLayer):
 
         for idx,item in enumerate(self.table):
             pos,name,score = item
-
             posy = h - 100 - ( (self.FONT_SIZE+15) * idx )
-
             pos.position=( 5, posy)
             name.position=( 48, posy)
             score.position=( w-150, posy )
-
             self.add( pos, z=2 )
             self.add( name, z=2 )
             self.add( score, z=2 )

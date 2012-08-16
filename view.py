@@ -31,7 +31,7 @@ class View(Layer):
         self.hud.show_message( 'Get ready', self.model.start())
     
     def on_deploy_tardis(self):
-        self.hud.show_message('TARDIS Deployed!')
+        self.hud.show_message('TARDIS!')
 
     def on_pause(self):
         self.hud.show_message('Paused!')
@@ -48,7 +48,6 @@ class View(Layer):
     def on_enter(self):
         super(View, self).on_enter()
         director.window.set_mouse_visible(False) # hide the mouse with the direct pyglet.window call
-        soundpygame.set_music('theme.ogg')
         soundpygame.play_music()
         #do sound stuff
 
@@ -137,6 +136,7 @@ class View(Layer):
         self.update_bullet_batch()
         glPushMatrix()
         self.transform()
+        self.model.scroller.draw()
         if self.model.tardis:
             self.model.tardis.draw()
         for m in self.model.mobs:

@@ -18,6 +18,7 @@ class Model(pyglet.event.EventDispatcher):
         self.mob_active_bullets = set([])
         self.mob_spawn_rate = 50
         self.mob_spawn_counter = 0
+        self.scroller = None
         #self.level = Level()
         status.reset()
         #set test level
@@ -25,6 +26,9 @@ class Model(pyglet.event.EventDispatcher):
 
     def set_controller(self, controller):
         self.controller = weakref.ref( controller )
+    
+    def set_scroller(self, scroller):
+        self.scroller = scroller
 
     def start( self ):
         self.set_next_level()
@@ -55,8 +59,7 @@ Model.register_event_type('on_deploy_tardis')
 class Player(Sprite):
     def __init__(self):
         ani = pyglet.image.load_animation(os.path.join('assets', 'player.gif'))
-        super(Player, self).__init__(ani)
-        self.position = (100, 100)
+        super(Player, self).__init__(ani, position=(200,200))
         self.sprinting = False
         self.move_up = False
         self.move_down = False
@@ -88,15 +91,14 @@ class Player(Sprite):
 
 class Cursor(Sprite):
     def __init__(self):
-        super(Cursor, self).__init__('crosshair.png')
-        self.position = (100, 100)
+        super(Cursor, self).__init__('crosshair.png', position = (200, 200))
+
     def update(self, x, y):
         self.position = (x, y)
 
 class Mob(Sprite):
     def __init__(self):
-        super(Mob, self).__init__('mob.png')
-        #self.position = (200, 200)
+        super(Mob, self).__init__('mob.png', position=(0,0))
         self.offscreen = False
         self.speed = 3
         self.active_bullets = set([])
@@ -118,8 +120,7 @@ class Mob(Sprite):
 
 class Mob2(Sprite):
     def __init__(self):
-        super(Mob2, self).__init__('mob2.png')
-        #self.position = (200, 200)
+        super(Mob2, self).__init__('mob2.png', position=(0,0))
         self.offscreen = False
         self.speed = 2
         self.value = 250
@@ -141,8 +142,7 @@ class Mob2(Sprite):
 
 class Mob3(Sprite):
     def __init__(self):
-        super(Mob3, self).__init__('mob3.png')
-        #self.position = (200, 200)
+        super(Mob3, self).__init__('mob3.png', position=(0,0))
         self.offscreen = False
         self.speed = 2
         self.value = 500
@@ -164,8 +164,7 @@ class Mob3(Sprite):
 
 class TARDIS(Sprite):
     def __init__(self):
-        super(TARDIS, self).__init__('tardis.png')
-        #self.position = (200, 200)
+        super(TARDIS, self).__init__('tardis.png', position=(0,0))
         self.offscreen = False
         self.speed = 2
         self.value = 1000

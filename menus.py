@@ -5,7 +5,7 @@ from cocos.scene import Scene
 from model import Model
 from controller import Controller
 from view import View
-from gamelayers import HUD, BackgroundLayer
+from gamelayers import HUD, BackgroundLayer, PygletParallax, ParallaxBGLayer, ParallaxBGLayer2, ScrollingManager
 import soundpygame
 
 class OptionsMenu( Menu ):
@@ -105,8 +105,17 @@ def get_newgame():
     model.set_controller(controller)
     hud = HUD()
     view = View(model, hud)
+    #scroller = ScrollingManager(viewport=director.window)
+    #pl = ParallaxBGLayer()
+    #pl.px_width = pl.img.width
+    #pl.px_height = pl.img.height
+    #pl2 = ParallaxBGLayer2(parallax=.5)
+    #scroller.add(pl)
+    #scroller.add(pl2)
+    pg = PygletParallax()
+    model.set_scroller(pg)
     scene.add(controller, z=1, name='controller')
     scene.add(hud, z=3, name='hud')
-    scene.add(BackgroundLayer(), z=0, name='background')
+    scene.add(pg, z=0, name='background')
     scene.add(view, z=2, name='view')
     return scene
