@@ -1,9 +1,7 @@
 import os
 import weakref
-from random import choice
 import bulletml
 import pyglet
-from cocos.euclid import Point2
 from cocos.sprite import Sprite
 from cocos.director import director
 from status import status
@@ -58,8 +56,11 @@ Model.register_event_type('on_deploy_tardis')
 
 class Player(Sprite):
     def __init__(self):
-        ani = pyglet.image.load_animation(os.path.join('assets', 'player.gif'))
-        super(Player, self).__init__(ani, position=(200,200))
+        #ani = pyglet.image.load_animation(os.path.join('assets', 'player.gif'))
+        frames = [pyglet.resource.image('player_frame_1.png'), pyglet.resource.image('player_frame_2.png')]
+        animation = pyglet.image.Animation.from_image_sequence(frames, 0.5)
+        super(Player, self).__init__(animation)
+        self.position = (200, 200)
         self.sprinting = False
         self.move_up = False
         self.move_down = False

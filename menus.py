@@ -1,19 +1,16 @@
+import pyglet
 from cocos.menu import *
 from cocos.director import *
-import pyglet
 from cocos.scene import Scene
 from model import Model
 from controller import Controller
 from view import View
-from gamelayers import HUD, PygletParallax
 import soundpygame
 
 class OptionsMenu( Menu ):
     def __init__(self):
         super( OptionsMenu, self).__init__('Options') 
         self.select_sound = soundpygame.load('Blip_Select.wav')
-
-        # you can override the font that will be used for the title and the items
         self.font_title['font_name'] = 'Times New Roman'
         self.font_title['font_size'] = 72
         self.font_title['color'] = (204,164,164,255)
@@ -24,11 +21,6 @@ class OptionsMenu( Menu ):
         self.font_item_selected['font_name'] = 'Times New Roman'
         self.font_item_selected['color'] = (94,233,239,255)
         self.font_item_selected['font_size'] = 46
-
-        # you can also override the font size and the colors. see menu.py for
-        # more info
-
-        # example: menus can be vertical aligned and horizontal aligned
         self.menu_anchor_y = 'center'
         self.menu_anchor_x = 'center'
 
@@ -50,15 +42,9 @@ class OptionsMenu( Menu ):
         director.show_FPS = value
 
 class MainMenu( Menu ):
-
     def __init__(self):
-        super( MainMenu, self).__init__('PyGauntlet') 
+        super( MainMenu, self).__init__('Dr. Whom!') 
         self.select_sound = soundpygame.load('Blip_Select.wav')
-        #self.select_sound = soundpygame.load('move.mp3')
-
-        # you can override the font that will be used for the title and the items
-        # you can also override the font size and the colors. see menu.py for
-        # more info
         self.font_title['font_name'] = 'Times New Roman'
         self.font_title['font_size'] = 72
         self.font_title['color'] = (204,164,164,255)
@@ -71,8 +57,6 @@ class MainMenu( Menu ):
         self.font_item_selected['color'] = (94,233,239,255)
         self.font_item_selected['font_size'] = 46
 
-
-        # example: menus can be vertical aligned and horizontal aligned
         self.menu_anchor_y = 'center'
         self.menu_anchor_x = 'center'
 
@@ -99,19 +83,13 @@ class MainMenu( Menu ):
         pyglet.app.exit()
 
 def get_newgame():
+    from gamelayers import HUD, PygletParallax
     scene = Scene()
     model = Model()
     controller = Controller(model)
     model.set_controller(controller)
     hud = HUD()
     view = View(model, hud)
-    #scroller = ScrollingManager(viewport=director.window)
-    #pl = ParallaxBGLayer()
-    #pl.px_width = pl.img.width
-    #pl.px_height = pl.img.height
-    #pl2 = ParallaxBGLayer2(parallax=.5)
-    #scroller.add(pl)
-    #scroller.add(pl2)
     pg = PygletParallax()
     model.set_scroller(pg)
     scene.add(controller, z=1, name='controller')

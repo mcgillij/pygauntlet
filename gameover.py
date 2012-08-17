@@ -1,6 +1,6 @@
+import pyglet
 from cocos.layer import ColorLayer
 from cocos.director import director
-import pyglet
 from cocos.text import Label
 from cocos.actions import Accelerate, Rotate, Reverse, Repeat, Delay
 import hiscore

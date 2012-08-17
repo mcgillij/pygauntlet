@@ -1,17 +1,9 @@
-#
-# HiScore
-#
-
 __all__ = ['hiscore']
 
 class HiScoreData( object ):
-
     POINTS, NAME = range(2)
-
     HISCORE_FILENAME = 'hi_scores.txt'
-
     MAX = 10
-
     def __init__( self ):
         super(HiScoreData, self).__init__()
         self.hi_scores = None
@@ -22,11 +14,9 @@ class HiScoreData( object ):
         try:
             f = open(self.HISCORE_FILENAME)
             for line in f.readlines():
-                # ignore comments
                 line = line.rstrip()
-                if line.startswith("#") or line == "":
+                if line == "":
                     continue
-                #print line
                 (score,name) = line.split(',')
                 self.hi_scores.append( (int(score),name ) )
             f.close()
@@ -42,13 +32,10 @@ class HiScoreData( object ):
             f.close()
         except Exception, e:
             #print 'Could not save hi scores'
-            #print e
             pass
 
     def add( self, score, name):
-        # safe replacement
         if score == "" or name == "":
-            #print "bad news"
             return
         for l in name:
             if not l.isalnum():
@@ -57,9 +44,7 @@ class HiScoreData( object ):
         self.hi_scores.append( (int(score),name ) )
         self.hi_scores.sort()
         self.hi_scores.reverse()
-
         self.hi_scores = self.hi_scores[:self.MAX]
-
         self.save()
 
     def is_in( self, score ):
@@ -69,8 +54,7 @@ class HiScoreData( object ):
             return True
         return False
 
-    def get( self, max=10 ):
-        # only return the max first records
-        return self.hi_scores[:max]
+    def get( self, maximum=10 ):
+        return self.hi_scores[:maximum]
 
 hiscore = HiScoreData()

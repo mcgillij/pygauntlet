@@ -1,11 +1,15 @@
-from cocos.layer import Layer, ColorLayer, ScrollableLayer, ScrollingManager
-from cocos.text import Label
 import pyglet
 from pyglet.sprite import Sprite
 from pyglet.gl import glPushMatrix, glPopMatrix
+from cocos.layer import Layer, ColorLayer
+from cocos.text import Label
 from cocos.director import director
 from cocos.actions import Accelerate, MoveBy, Delay, Hide, CallFunc
+from cocos.scenes.transitions import ShuffleTransition
+from cocos.scene import Scene
+from cocos.layer import MultiplexLayer
 from status import status
+from menus import MainMenu, OptionsMenu
 import hiscore
 
 class PygletParallax(Layer):
@@ -48,7 +52,41 @@ class BackgroundLayer(Layer):
         self.transform()
         self.img.blit(0, 0)
         glPopMatrix()
-
+        
+class IntroLayer(Layer):
+    is_event_handler = True
+    def __init__(self):
+        super(IntroLayer, self).__init__()
+        self.img = pyglet.resource.image('background.png')
+        self.intro_text = Label('Made by some Asshole:', font_size=24,
+                           font_name='Times New Roman',
+                           color=(255,255,255,255),
+                           anchor_x='left',
+                           anchor_y='bottom')
+        self.intro_text.position = (0, 0)
+        self.add(self.intro_text)
+    def draw(self):
+        glPushMatrix()
+        self.transform()
+        self.intro_text.draw()
+        self.img.blit(0, 0)
+        glPopMatrix()
+    def start_game(self):
+        scene = Scene()
+        scene.add(MultiplexLayer(
+                         MainMenu(),
+                         OptionsMenu(),
+                         HiScoresLayer(),
+                         ), z=1)
+        scene.add(BackgroundLayer(), z=0)
+        director.push(ShuffleTransition(scene, 1.5))
+    def on_key_press(self, k, m):
+        if k in (pyglet.window.key.ENTER, pyglet.window.key.ESCAPE, pyglet.window.key.SPACE):
+            self.start_game()
+            return True
+    def on_mouse_press(self, x, y, b, m):
+        self.start_game()
+        return True
 class ScoreLayer(Layer):
     def __init__(self):
         width, height = director.get_window_size()
